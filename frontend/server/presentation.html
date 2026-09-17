@@ -1,0 +1,162 @@
+<!-- Standalone document that can also be embedded in the Presentation HTML field. -->
+<style>
+  .chain-guide { color:#e8edf0; background:#101619; font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif; padding:32px; max-width:1100px; margin:0 auto; box-sizing:border-box; overflow-wrap:anywhere; color-scheme:dark; }
+  .chain-guide * { box-sizing:border-box; }
+  .chain-guide h1,.chain-guide h2,.chain-guide h3 { color:#fff; line-height:1.25; letter-spacing:0; margin:0 0 16px; }
+  .chain-guide h1 { font-size:36px; }
+  .chain-guide h2 { font-size:25px; }
+  .chain-guide h3 { font-size:19px; margin-top:24px; }
+  .chain-guide p { margin:0 0 16px; }
+  .chain-guide a { color:#70dfc3; text-underline-offset:4px; }
+  .chain-guide strong { color:#fff; }
+  .chain-guide header { border-bottom:3px solid #31cfa7; padding:12px 0 28px; }
+  .chain-guide .eyebrow { color:#70dfc3; font-weight:700; margin-bottom:12px; }
+  .chain-guide .lead { font-size:19px; max-width:850px; }
+  .chain-guide nav { padding:24px 0; border-bottom:1px solid #354149; display:flex; flex-wrap:wrap; gap:12px 24px; }
+  .chain-guide section { padding:32px 0; border-bottom:1px solid #354149; scroll-margin-top:24px; }
+  .chain-guide ul,.chain-guide ol { padding-left:25px; margin:12px 0 20px; }
+  .chain-guide li { margin:8px 0; }
+  .chain-guide code { font-size:0.9em; color:#f2d98e; white-space:normal; }
+  .chain-guide .note { border-left:4px solid #e6be63; padding:12px 18px; background:#20282c; margin:20px 0; }
+  .chain-guide .flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; list-style:none; padding:0; counter-reset:step; }
+  .chain-guide .flow li { border-top:2px solid #70dfc3; padding-top:12px; counter-increment:step; }
+  .chain-guide .flow li::before { content:counter(step,decimal-leading-zero); display:block; color:#70dfc3; font-weight:700; font-size:22px; }
+  .chain-guide .flow strong { display:block; }
+  .chain-guide .table-wrap { overflow-x:auto; }
+  .chain-guide table { width:100%; border-collapse:collapse; font-size:15px; }
+  .chain-guide th,.chain-guide td { text-align:left; vertical-align:top; padding:14px 12px; border-bottom:1px solid #354149; }
+  .chain-guide th { color:#70dfc3; }
+  .chain-guide footer { padding-top:24px; color:#b7c5ce; font-size:14px; }
+  @media(max-width:640px) { .chain-guide { padding:20px 16px; } .chain-guide h1 { font-size:28px; } .chain-guide .flow { grid-template-columns:1fr 1fr; } }
+  @media print { .chain-guide { background:white; color:#222; max-width:none; padding:0; } .chain-guide h1,.chain-guide h2,.chain-guide h3,.chain-guide strong { color:#111; } .chain-guide a,.chain-guide code,.chain-guide th,.chain-guide .eyebrow { color:#185c50; } .chain-guide .note { background:#f2f4f4; } .chain-guide nav { display:none; } }
+</style>
+
+<article class="chain-guide" lang="en" aria-label="LGPD Chain presentation">
+  <header>
+    <p class="eyebrow">DATA SHARING &middot; AUTHORIZED EDITING &middot; AUDITING</p>
+    <h1>LGPD Chain</h1>
+    <p class="lead">An interface for registering, sharing, retrieving, and verifying user information on an editable blockchain.</p>
+    <p>This application is part of a master's research prototype on editable blockchains. It brings data blockchain operations together in a web interface: from preparing and publishing a record to correcting information, exercising the right to be forgotten, and issuing a certificate.</p>
+  </header>
+
+  <nav aria-label="Presentation contents">
+    <a href="#cg-purpose">Why does it exist?</a>
+    <a href="#cg-how">How it works</a>
+    <a href="#cg-users">Users</a>
+    <a href="#cg-blocks">Blocks</a>
+    <a href="#cg-erasure">Right to be forgotten</a>
+    <a href="#cg-audit">Verification and certificates</a>
+    <a href="#cg-settings">Settings</a>
+  </nav>
+
+  <section id="cg-purpose">
+    <h2>Sharing information while retaining control over changes</h2>
+    <p>Imagine a consortium of companies accessing customer information on the same private blockchain. Participants need consistent data, but they may not fully trust one another or the infrastructure administrator. At the same time, customers need to correct information and request its removal.</p>
+    <p>In a conventional blockchain, modifying recorded data can invalidate the chain's cryptographic links. The approach accessed through this app combines <strong>chameleon hashing</strong>, which enables authorized changes, with <strong>integrity checks and a Cuckoo Filter</strong>, which support the auditing of records and erasure operations.</p>
+    <p>In this usage model, each data subject controls the private key associated with their data. Authorized participants can access and verify the shared information; producing a change that preserves the original cryptographic commitment requires the corresponding private key.</p>
+    <div class="note"><strong>What this protection means:</strong> unauthorized changes can be detected through cryptographic verification. Protection depends on the security of the keys and infrastructure. It does not prevent someone from copying information they have already accessed, nor does it establish whether information was truthful when first registered.</div>
+  </section>
+
+  <section id="cg-how">
+    <h2>From registration to verification</h2>
+    <ol class="flow">
+      <li><strong>Prepare</strong>Create the local record and obtain the chameleon hash parameters.</li>
+      <li><strong>Publish</strong>Compute the data hash and submit the record to the blockchain.</li>
+      <li><strong>Manage</strong>Inspect blocks and authorize corrections or erasure using the trapdoor.</li>
+      <li><strong>Verify</strong>Check integrity and retrieve the recorded evidence of deletion.</li>
+    </ol>
+    <h3>Three components with different roles</h3>
+    <ul>
+      <li><strong>Web interface:</strong> organizes records, operations, results, and certificates. It supports English and Portuguese, as well as light and dark themes.</li>
+      <li><strong>Local SQLite database:</strong> the <code>server/front.sqlite</code> file stores local users, settings, API access logs, and the certificate template.</li>
+      <li><strong>Blockchain:</strong> a service accessed through REST APIs maintains the blocks, associated data, and cryptographic mechanisms. Saving a user locally does not automatically publish that user on the blockchain.</li>
+    </ul>
+    <h3>What is the trapdoor?</h3>
+    <p>The <strong>CH Trap Door</strong> is the chameleon hash private key. It allows new parameters to be computed for a modified message while preserving the original hash. The public key allows this relationship to be verified, but it cannot replace the trapdoor when authorizing changes.</p>
+    <p>In this prototype, key generation and collision generation functions are accessed through APIs. The trapdoor entered in the modal is sent to the computation service, which therefore forms part of the demonstration's trusted environment. Hiding a key with the eye icon protects its on-screen visibility; it does not encrypt the stored key.</p>
+  </section>
+
+  <section id="cg-users">
+    <h2>Users &middot; Preparing and managing user records</h2>
+    <p>The <strong>Users / Blockchain users</strong> screen brings together local records. Each record contains a name, identifier, address, telephone numbers, email addresses, and chameleon hash keys.</p>
+    <ul>
+      <li><strong>Manual creation:</strong> opens a record with empty fields to be completed and saved.</li>
+      <li><strong>Automatic creation:</strong> generates the requested number of fictional users, updating the list and counter as each record is created.</li>
+      <li><strong>Create:</strong> the buttons beside individual fields generate sample data; names and addresses use the available country profiles.</li>
+      <li><strong>Get from blockchain:</strong> requests chameleon hash key generation using the bit length configured in Settings.</li>
+      <li><strong>Save user and Delete user:</strong> save changes or remove local records after confirmation. Local deletion does not exercise the right to be forgotten on the blockchain.</li>
+      <li><strong>Multiple selection:</strong> lets you select records using Ctrl and Shift and delete them sequentially after confirmation.</li>
+    </ul>
+    <h3>Sending data to the blockchain</h3>
+    <p>The <strong>Send to blockchain</strong> button opens a modal containing the data prepared for publication. The private key is displayed separately, hidden by default, and is not included in the record's public content. First, <strong>Sign infodata</strong> computes the chameleon hash. A valid signature enables submission. When the blockchain confirms creation, the local record is marked as <strong>Sent to blockchain</strong>.</p>
+    <p>The totals of sent and unsent users help track progress. The <strong>Not Sent</strong> filter displays records whose local <code>sent</code> state is false; the <strong>Sent</strong> filter displays those marked as sent. This state represents the local submission history, not a fresh blockchain integrity check.</p>
+    <p>To submit several pending records, use <strong>Send not sent to blockchain</strong>: enter the quantity and the interval between submissions. The app signs and sends each eligible user, updates the counters, and displays the wait until the next submission. Canceling stops the sequence; records already confirmed remain sent.</p>
+    <p><strong>Check user on blockchain</strong> queries the Cuckoo Filter. A membership query alone does not replace right-to-be-forgotten verification using the identifier and certificate: absence may also indicate a user who was never registered.</p>
+  </section>
+
+  <section id="cg-blocks">
+    <h2>Blocks &middot; Inspecting the blockchain</h2>
+    <p>The list loads the number of blocks defined in Settings, displays the most recent first, and periodically checks for new blocks. The <strong>Reload</strong> button allows a fresh manual query. Filters help locate items by number, data address, and date range.</p>
+    <p>Each block shows its number and date and time. Expanding it prompts the app to retrieve its full details and organize them into three tabs:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Tab</th><th scope="col">Content</th><th scope="col">Purpose</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Metadata</th><td>Number, timestamp, parent hash, origin and sealing information, <code>merk_hash</code>, <code>cuckoofilter_hash</code>, and <code>userdata_id_hash</code>.</td><td>Inspect the block's structure and cryptographic references.</td></tr>
+          <tr><th scope="row">User Data</th><td>Record identification and address, <code>infodata</code>, public key, and auxiliary chameleon hash parameters.</td><td>View current data and initiate editing or the right to be forgotten.</td></tr>
+          <tr><th scope="row">JSON</th><td>The detailed API response in a structured viewer.</td><td>Examine the complete fields and values returned by the service.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Correcting data</h3>
+    <p>Under <strong>User Data</strong>, the <strong>Edit</strong> button opens the editing modal. Enter the new <code>infodata</code> content and the trapdoor. Once the signature is validated, submit the change to the blockchain. After confirmation, the app retrieves the block again to display the updated information.</p>
+  </section>
+
+  <section id="cg-erasure">
+    <h2>Right to be Forgotten &middot; Requesting erasure</h2>
+    <p>This workflow requests the replacement of personal data associated with the record with a deletion message. It uses the trapdoor to generate the parameters required for the authorized change.</p>
+    <ol>
+      <li>Open the desired block and select <strong>User Data &rarr; Right to be Forgotten</strong>.</li>
+      <li>In the confirmation modal, enter the <strong>CH Trap Door</strong> corresponding to the record.</li>
+      <li>Click <strong>Confirm</strong>. The app requests a collision for the message containing <code>deleted: true</code> and the reason for erasure.</li>
+      <li>If the API confirms a valid signature, click <strong>Send to Blockchain</strong>. The request is submitted in deletion mode.</li>
+      <li>Monitor the result. When the operation is confirmed, the app reloads the block data.</li>
+    </ol>
+    <p>Evidence of deletion can later be retrieved through the certificate and blockchain verification functions. Removal from the service does not automatically delete previously exported copies, local records, or histories maintained by other participants.</p>
+  </section>
+
+  <section id="cg-audit">
+    <h2>Data verification &middot; Checking results</h2>
+    <h3>Block Verifier</h3>
+    <p>Enter the block number and click <strong>Verify block</strong>. The service checks whether the computed hashes match the block's references. The result appears in green for validity or red for failure. The button remains disabled while the query is in progress.</p>
+    <h3>Issue a certificate</h3>
+    <p>In the block details area, next to the JSON tab, the <strong>Issue a certificate</strong> button becomes available when <code>infodata.deleted</code> indicates deletion. Enter the user's original identifier: the app computes its SHA3-256 hash and compares it with <code>userdata_id_hash</code> in the metadata.</p>
+    <p>If the values match, a PDF is generated using the template saved in Settings, containing the entered identifier, the <code>cuckoofilter_hash</code>, and the block's date, time, and number. The modal allows you to preview and download the document, with selectable text over the background image.</p>
+    <h3>Verify right to be forgotten</h3>
+    <p>On the verification screen, enter the original <strong>User ID Number</strong> and the <strong>Right to be forgotten certificate</strong>, whose value is the corresponding <code>cuckoofilter_hash</code>. Click <strong>Verify in blockchain</strong>. The response reports the result in the selected language; on success, it also displays the block number and <code>time_stamp</code>.</p>
+    <p>The PDF organizes the information for reference and sharing. Verification against the blockchain is what allows the references presented in the document to be checked.</p>
+  </section>
+
+  <section id="cg-transactions">
+    <h2>Transactions &middot; Request history</h2>
+    <p>This screen associates each logged request with its response: method, route, date, time, and JSON content. Expanding an item allows you to examine what was sent and what was returned. Filters by route, date range, and order help investigate errors and track operations.</p>
+    <p>Routes included in the Settings exception list are not recorded in this local history. This allows frequent internal queries to be excluded. Logs are operational records of the application and may contain data sent to the APIs; they complement cryptographic auditing but do not replace it.</p>
+  </section>
+
+  <section id="cg-settings">
+    <h2>Settings &middot; Configuring the environment</h2>
+    <ul>
+      <li><strong>Local database:</strong> displays the SQLite file used by the app.</li>
+      <li><strong>Blockchain APIs:</strong> configures the address, port, query routes, and number of blocks to load.</li>
+      <li><strong>Chameleon hash:</strong> defines the bit length used in key generation requests.</li>
+      <li><strong>History exceptions:</strong> determines which internal routes will not be logged in Transactions.</li>
+      <li><strong>Interface:</strong> selects the language and theme and allows the presentation HTML to be edited in English and Portuguese.</li>
+      <li><strong>Certificate:</strong> uploads the JPG background and adjusts the position, font, size, and color of the certificate's four text fields, with a real-time preview.</li>
+    </ul>
+    <p>Use <strong>Save settings</strong> to persist changes. To get started, check the blockchain connection, create a test record, publish it, and inspect its block. Then explore editing, verification, and certificate issuance using fictional data.</p>
+  </section>
+
+  <footer>
+    <p>LGPD Chain &middot; An academic prototype for accessing an editable blockchain. The application provides technical mechanisms for modification and verification; participants remain responsible for managing shared information and keys.</p>
+  </footer>
+</article>

@@ -1,0 +1,13 @@
+# Defaults loaded when the SQLite settings table is empty.
+apiHost=192.168.1.109
+apiPort=3000
+blocksRoute=/user/blockslimit
+blocksLimit=100
+lastBlockRoute=/user/lastblockID
+blockByIdRoute=/user/blockbyID
+chBits=128
+internalRoutes=/user/lastblockID,/user/blockbyID,/user/blockslimit
+theme=dark
+language=en
+presentationHtmlEn=<h1><center>Blockchain</center></h1><p><center>Access frontend</center></p>
+presentationHtmlPt=<h1><center>Blockchain</center></h1><p><center>Frontend de acesso</center></p>
