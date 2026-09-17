@@ -1,0 +1,29 @@
+Node 1
+
+{
+  "mode": "random",
+  "address": "0xd5814BAc43040Fa562e86C76BBa42C653d9f6631",
+  "publicKey": "0x04f23fc380707c885c33538961525f54981d8f451b4c88e08f4865704c0f502018f1af836223d14ea7783d4fbdda1ca34203e29ebc972e3345dc50d4c82e588cae",
+  "privateKey": "0x393edbb8bf8b4fe5f340305146873b1a320efe915558915984e8c1258860a467",
+  "mnemonic": "cover armed patient setup dress sugar indoor member exclude green cram scene"
+}
+
+Node 2
+
+{
+  "mode": "random",
+  "address": "0x80ABA22E00AD9BC36370EbfEA8488E2Dd13e3B63",
+  "publicKey": "0x04dc111c3940a36e1f3bf67c2892ff0bcc4ddb7d1dd33ae035d2f7392fce439c09fa07cc733abd993977b2bb604826e08330b910440ef071813322c80cd3ba653d",
+  "privateKey": "0x86cb9baa2acf4b8d9ae248d7ad1801425841c944ed04cf8bb9d97100fb21653d",
+  "mnemonic": "bulb oak tuition action marriage defense staff race hill rookie attitude cactus"
+}
+
+Node 3
+
+{
+  "mode": "random",
+  "address": "0x133496D5af790F022b8c14789B1aC52b71662935",
+  "publicKey": "0x04f5af0ed9f08c1884ad155c05a0ea0a4627dc10a06070a98856921c36507a500db7dab489e130c35a1e816f38b3ed354a1264383403bfc10e8e4c206c75c65dc6",
+  "privateKey": "0x2160969ab8c1108ff826b8a6a88af79731bb76cc42373a91b212f5cbc1ce69a0",
+  "mnemonic": "exhaust picnic copper buffalo snow envelope radar husband truth orchard sport soldier"
+}

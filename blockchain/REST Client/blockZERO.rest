@@ -1,0 +1,96 @@
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/chamkeygen
+content-type: application/json
+
+{
+  "bits": 128
+}   
+###
+//Retorno:
+{
+  "publicKey": {
+    "p": "517280088150517675694614724152868219039",
+    "q": "258640044075258837847307362076434109519",
+    "g": "62332653768497963520509164468796412104",
+    "y": "316641863283003785743079475967525314041"
+  },
+  "privateKey": "229332037295563069635957887663239582056"
+}
+
+###
+
+//Preparar dados para criar um novo bloco
+                // Assinando a mensagem com o hash camaleão gerado
+
+// Passo 02 - Assinar mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chamhash
+content-type: application/json
+
+{
+    "publicKey": {
+    "p": "517280088150517675694614724152868219039",
+    "q": "258640044075258837847307362076434109519",
+    "g": "62332653768497963520509164468796412104",
+    "y": "316641863283003785743079475967525314041"
+    },
+    "infodata": {"User_id": 0, "message": "Block Zero"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "xp": {
+    "r": "211649287880646021666739945120983715214",
+    "s": "197876057572313125768789055312379845886"
+  },
+  "hash": "230188027892853852198063748395450483509"
+}
+
+###
+//PASSO 3 - Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "517280088150517675694614724152868219039",
+    "q": "258640044075258837847307362076434109519",
+    "g": "62332653768497963520509164468796412104",
+    "y": "316641863283003785743079475967525314041"
+  },
+  "hash": "230188027892853852198063748395450483509",
+  "infodata": {"User_id": 0, "message": "Block Zero"},
+  "xp": {
+    "r": "211649287880646021666739945120983715214",
+    "s": "197876057572313125768789055312379845886"
+  }
+}   
+ 
+###
+//Retorno:
+// Insere novo userdata e insere um novo bloco  4000000000
+POST http://localhost:3000/addNewDataUser
+content-type: application/json
+
+{
+"tx":{  
+    "userdata_id" : 0,
+    "infodata" : {"User_id": 0, "message": "Block Zero"},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "517280088150517675694614724152868219039",
+    "q": "258640044075258837847307362076434109519",
+    "g": "62332653768497963520509164468796412104",
+    "y": "316641863283003785743079475967525314041"},
+
+    "hash": "230188027892853852198063748395450483509",
+
+   "xp": {
+    "r": "211649287880646021666739945120983715214",
+    "s": "197876057572313125768789055312379845886"}
+    }
+    
+}
+}
+###
+//Retorno: 

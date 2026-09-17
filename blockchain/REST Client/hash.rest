@@ -1,0 +1,23 @@
+//Para rodar CTR+ALT+S
+
+
+
+//retorna chaves hash camaleão
+
+GET http://localhost:3000/chkeygen
+content-type: application/json
+
+{}
+
+###
+
+hash 01
+{
+  "params": {
+    "p": "e43544d34c3fb64fd6af951f41635b4d",
+    "q": "721aa269a61fdb27eb57ca8fa0b1ada6",
+    "g": "7728752409eb8164887921184bdf4744",
+    "hk": "20030c55f09687a4826c0aa11685640d",
+    "tk": "27e7958cf3ccd2153aba9d1fd1ccd4c2"
+  }
+}

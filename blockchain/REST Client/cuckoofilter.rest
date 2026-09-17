@@ -1,0 +1,104 @@
+//Para rodar CTR+ALT+S
+
+
+// probabilidade 1.86 X 10 -19
+
+1 em 18.600.000.000.000.000.000
+
+###
+
+//insere dados no cuckoo filter
+
+POST http://localhost:3000/cuckoo/insert 
+content-type: application/json
+
+{
+   "user_data":{
+    "id":123,
+    "email":"a@b.com",
+    "tags": ["x","y"],
+    "infodata" : "Mensagem de teste4"
+   }
+}
+
+###
+
+//checa se determinado dado está no cuckoo filter
+
+POST http://localhost:3000/cuckoo/contains
+content-type: application/json
+
+{
+   "user_data":{
+    "id":123,
+    "email":"a@b.com",
+    "tags": ["x","y"],
+    "infodata" : "Mensagem de teste4"
+   }
+}
+###
+
+//deleta determinado dado no cuckoo filter
+
+POST http://localhost:3000/cuckoo/delete
+content-type: application/json
+
+{
+   "user_data":{
+    "id":123,
+    "email":"a@b.com",
+    "tags": ["x","y"],
+    "infodata" : "Mensagem de teste4"
+   }
+}
+
+###
+
+//retorna todos os blocos
+
+GET http://localhost:3000/cuckoo/health
+content-type: application/json 
+
+{}
+
+###
+
+
+POST http://localhost:3000/cuckoo/delete
+content-type: application/json
+
+{
+   "user_data":"4000000000"
+}
+
+###
+
+//checa se determinado dado está no cuckoo filter
+
+POST http://localhost:3000/cuckoo/contains
+content-type: application/json
+
+{
+   "user_data":"132039951230819"
+}
+###
+
+//checa se o hash do cuckoo filter está correto
+
+GET http://localhost:3000/cuckoo/hash
+content-type: application/json
+
+{}
+###
+
+//checa se determinado dado está no cuckoo filter
+
+POST http://localhost:3000/cuckoo/checkrighttobeforgoten
+content-type: application/json
+
+{"user_data":{
+   "user_data_id":"49672701452458",
+   "cuckoofilter_hash": "e6b17c9a71b05e057d42c69e87eecd277f42d91e3e029f3900a4d3e7daf8a14f"
+}
+}
+###

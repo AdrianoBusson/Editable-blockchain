@@ -1,0 +1,161 @@
+//Node 1
+
+//Gerar nova carteira aleatóia do zero
+POST http://localhost:3000/user/address
+content-type: application/json
+
+{}
+
+###
+//Recebido:
+{
+  "mode": "random",
+  "address": "0xd5814BAc43040Fa562e86C76BBa42C653d9f6631",
+  "publicKey": "0x04f23fc380707c885c33538961525f54981d8f451b4c88e08f4865704c0f502018f1af836223d14ea7783d4fbdda1ca34203e29ebc972e3345dc50d4c82e588cae",
+  "privateKey": "0x393edbb8bf8b4fe5f340305146873b1a320efe915558915984e8c1258860a467",
+  "mnemonic": "cover armed patient setup dress sugar indoor member exclude green cram scene"
+}
+###
+//CHash 01 principal
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/keygen
+content-type: application/json
+
+{
+  "bits": 128
+}
+
+###
+//Recebido
+{
+  "ok": true,
+  "bits": 128,
+  "params": {
+    "p": "a24129dcfbc7a587e96b178f2cd869bb",
+    "q": "512094ee7de3d2c3f4b58bc7966c34dd",
+    "g": "1fa20221ddc4aee63a4c041d1f08a309",
+    "hk": "7bac2e6a6bb591f3f56f89029330ca7f",
+    "tk": "21d31f4e9e69fa1db148c801585798aa"
+  }
+}
+###
+
+//CHash 2ndary para derivar novos parâmetros
+//Gerar novos parâmetros com a mesma trapdoor
+POST http://localhost:3000/user/derive-params
+content-type: application/json
+
+{
+  "params": {
+    "p": "a24129dcfbc7a587e96b178f2cd869bb",
+    "q": "512094ee7de3d2c3f4b58bc7966c34dd",
+    "g": "1fa20221ddc4aee63a4c041d1f08a309",
+    "tk": "21d31f4e9e69fa1db148c801585798aa"
+  }
+}
+
+###
+//recebido - novo parâmetro g
+
+  "ok": true,
+  "params": {
+    "p": "a24129dcfbc7a587e96b178f2cd869bb",
+    "q": "512094ee7de3d2c3f4b58bc7966c34dd",
+    "g": "6d9e5d5677a92c161921ad0be3347492",
+    "hk": "54422c93172d7d1c7710fda6619803c",
+    "tk": "21d31f4e9e69fa1db148c801585798aa"
+  }
+}
+
+
+CH_HASH novo
+
+{
+  "publicKey": {
+    "g": "165819032534242494780161889604868877368",
+    "p": "270043596262387001980556236782012786239",
+    "q": "135021798131193500990278118391006393119",
+    "y": "172049993671430279275981605595047600731"
+  },
+  "privateKey": "71650397094340915689027523145141192909"
+}
+###
+// Passo 02 - Assinar mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chamhash
+content-type: application/json
+
+{
+    "publicKey": {
+    "g": "165819032534242494780161889604868877368",
+    "p": "270043596262387001980556236782012786239",
+    "q": "135021798131193500990278118391006393119",
+    "y": "172049993671430279275981605595047600731"
+    },
+    "infodata": {"User_id": 0, "message": "Block Zero"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "xp": {
+    "r": "243915443842641063057658248781131320077",
+    "s": "171567428861329426198222918050130182074"
+  },
+  "hash": "184650015479719014614453152216026242887"
+}
+
+###
+
+//PASSO 3 - Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "270043596262387001980556236782012786239",
+    "q": "135021798131193500990278118391006393119",
+    "g": "165819032534242494780161889604868877368",
+    "y": "172049993671430279275981605595047600731"
+  },
+  "hash": "184650015479719014614453152216026242887",
+  "infodata": {"User_id": 0, "message": "Block Zero"},
+  "xp": {
+    "r": "243915443842641063057658248781131320077",
+    "s": "171567428861329426198222918050130182074"
+  }
+}   
+ 
+###
+//Retorno:
+{
+  "hash": "184650015479719014614453152216026242887",
+  "valid": true
+}
+###
+// Insere novo userdata e insere um novo bloco
+POST http://localhost:3000/addNewDataUser
+content-type: application/json
+
+{
+"tx":{  
+    "userdata_id" : 1,
+    "infodata" : {"User_id": 1, "message": "Block Zero"},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "598761912410855381067298061998527924023",
+    "q": "299380956205427690533649030999263962011",
+    "g": "594666147322603474793236468741893999834",
+    "y": "151138975585656575216888698896456173099"},
+
+    "hash": "184650015479719014614453152216026242887",
+
+   "xp": {
+    "r": "243915443842641063057658248781131320077",
+    "s": "171567428861329426198222918050130182074"}
+    }
+    
+}
+}
+###
+//Retorno: 
+

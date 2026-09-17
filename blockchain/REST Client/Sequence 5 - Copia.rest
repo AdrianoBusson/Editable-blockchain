@@ -1,0 +1,325 @@
+//Para rodar CTR+ALT+S
+
+//INICIAL - Parâmetros de usuário - Criar novo hash camaleãopara usuário
+
+// Passo 01 - Gerar nova chave hash camaleão baseado em Ateniese/Medeiros
+
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/chamkeygen
+content-type: application/json
+
+{
+  "bits": 128
+}   
+###
+//Retorno:
+{
+  "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+  },
+  "privateKey":"186195996867629769631002631024628832666"
+}
+###
+//Preparar dados para criar um novo bloco
+                // Assinando a mensagem com o hash camaleão gerado
+
+// Passo 02 - Assinar mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chamhash
+content-type: application/json
+
+{
+    "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+    },
+    "infodata": {"message": "Message test 1"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "xp": {
+    "r": "110315100609924833236196300576278770857",
+    "s": "184764389274144869748387122656887753917"
+  },
+  "hash": "195739631113041003955811240335438521463"
+}
+###
+//PASSO 3 - Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+  },
+  "hash": "195739631113041003955811240335438521463",
+  "infodata": {"message": "Message test 1"},
+  "xp": {
+    "r": "110315100609924833236196300576278770857",
+    "s": "184764389274144869748387122656887753917"
+  }
+}   
+ 
+###
+//Retorno:
+
+{
+  "hash": "42428121209803273338361702865982334322",
+  "valid": true
+}
+
+####
+
+//Passo 03 - Fazer uma solicitação para criar um novo bloco
+                //sendo a primeira transação de usuário novo
+                //utilizando mensagem assinada com hash camaleão
+
+// Insere novo userdata e insere um novo bloco  4000000000
+POST http://localhost:3000/addNewDataUser
+content-type: application/json
+
+{
+"tx":{  
+    "userdata_id" : 4000000000,
+    "infodata" : {"User_id": 4000000000, "message": "Teste mensagem original para hash camaleão"},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"},
+
+    "hash": "42428121209803273338361702865982334322",
+
+   "xp": {
+    "r": "27648842409985045278331317013385099730",
+    "s": "233584543648641309815827433949755016370"}
+    }
+    
+}
+}
+###
+//Retorno: 
+
+{
+  "sucesso": true,
+  "message": "Novo usuário adicionado, bloco criado e inserido no filtro com sucesso.",
+  "blockData": {
+    "block_number": 104,
+    "parent_hash": "bd7f238960588aea4437d7dfa77fefc2cfcb5a54e98dbd44a95f1d9be60b1232",
+    "time_stamp": "2026-06-08T21:11:47.572Z",
+    "sealer_node_id": 1,
+    "origin_node_id": 1,
+    "ch_hash": {
+      "xp": {
+        "r": "27648842409985045278331317013385099730",
+        "s": "233584543648641309815827433949755016370"
+      },
+      "hash": "42428121209803273338361702865982334322",
+      "publicKey": {
+        "g": "210541243631077037201866261480409723928",
+        "p": "648381412840268055894789320315838648443",
+        "q": "324190706420134027947394660157919324221",
+        "y": "190122106412543002573693484360354515267"
+      }
+    },
+    "userdata_address": "42428121209803273338361702865982334322",
+    "merk_hash": "2c5bc87bf1d9b6f33dbc3d298abe5cd514aa23ed6ab92e4e8eb5dde8db17f263"
+  }
+}
+
+###
+
+//ATUALIZAÇÃO DE USERDATA - 
+
+//Atualizar um userdata existente
+  //utilizando mensagem assinada com hash camaleão
+
+//PASSO 04 - Gerar colisão hash camaleão para a nova mensagem, 
+                //utilizando a trapdoor key
+
+// Gera colisão hash camaleão
+POST http://localhost:3000/user/chamchcollision
+content-type: application/json
+
+{
+     "hash": "195739631113041003955811240335438521463",
+    "publicKey": {
+      "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+
+    },
+    "privateKey": "186195996867629769631002631024628832666",
+    "newInfodata": {"message": "Message test 1"}
+}
+###
+
+
+//Retorno:
+
+{
+  "ok": true,
+  "hash": "195739631113041003955811240335438521463",
+  "xp": {
+    "r": "228859607504016575693931411308102050499",
+    "s": "140619739784961980955331843877649104939"
+  },
+  "valid": true
+}
+
+###
+
+###
+
+//PASSO 5 - Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+  },
+  "hash": "42428121209803273338361702865982334322",
+  "infodata": {"User_id": 4000000000, "message": "Teste mensagem MODIFICADA para hash camaleão"},
+  "xp": {
+    "r": "286007942386525951812426193857118938960",
+    "s": "267053651268057546211935562445527207564"
+  }
+}  
+###
+//Retorno:
+{
+  "hash": "42428121209803273338361702865982334322",
+  "valid": true
+}
+###
+
+//PASSO 6 - Fazer uma solicitação para atualizar o userdata existente
+                //sendo a transação de atualização de usuário
+                //utilizando mensagem assinada com hash camaleão
+
+    
+
+// atualiza um userdata existente
+POST http://localhost:3000/updateuserdata
+content-type: application/json
+
+{ "mode":1,
+"tx":{  "userdata_id" : 4000000000,
+    "infodata": {"User_id": 4000000000, "message": "Teste mensagem MODIFICADA para hash camaleão"},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"},
+
+    "hash": "42428121209803273338361702865982334322",
+   
+  "xp": {
+    "r": "286007942386525951812426193857118938960",
+    "s": "267053651268057546211935562445527207564"}
+    }
+    
+}
+}
+###
+Retorno:
+{   "message": "Dados de usuário atualizado, bloco criado com sucesso e confirmado que usuário já existe no filtro.",
+    "sucesso": true
+  }
+
+###
+
+// Exercício do direito ao esquecimento - atualizar um userdata existente para "esquecer" os dados anteriores
+//utilizando mensagem assinada com hash camaleão
+// Gera colisão hash camaleão para infodata vazio
+POST http://localhost:3000/user/chamchcollision
+content-type: application/json
+
+{
+    "publicKey": {
+        "p": "648381412840268055894789320315838648443",
+        "q": "324190706420134027947394660157919324221",
+        "g": "210541243631077037201866261480409723928",
+        "y": "190122106412543002573693484360354515267"
+    },
+    "privateKey": "186195996867629769631002631024628832666",
+    "hash": "42428121209803273338361702865982334322",
+    "newInfodata": {"User_id": 4000000000}
+  }
+###
+
+//Retorno:
+{
+  "ok": true,
+  "hash": "42428121209803273338361702865982334322",
+  "xp": {
+    "r": "275478216985021796968221807188553017510",
+    "s": "42439815091179596114546435185459240764"
+  },
+  "valid": true
+}
+###
+// Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+  },
+  "hash": "42428121209803273338361702865982334322",
+  "infodata": {"User_id": 4000000000},
+  "xp": {
+    "r": "275478216985021796968221807188553017510",
+    "s": "42439815091179596114546435185459240764"
+  }
+}  
+###
+//Retorno:
+{
+  "hash": "42428121209803273338361702865982334322",
+  "valid": true
+}
+###
+POST http://localhost:3000/updateuserdata
+content-type: application/json
+
+{ "mode":0,
+"tx":{  
+    "infodata": {"User_id": 4000000000},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"},
+
+    "hash": "42428121209803273338361702865982334322",
+   
+  "xp": {
+    "r": "275478216985021796968221807188553017510",
+    "s": "42439815091179596114546435185459240764"}
+    }
+    
+}
+}
+###

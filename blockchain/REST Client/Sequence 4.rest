@@ -1,0 +1,200 @@
+//Para rodar CTR+ALT+S
+
+//INICIAL - Parâmetros de usuário - Criar novo hash camaleãopara usuário
+
+// Passo 01 - Gerar nova chave hash camaleão
+
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/keygen
+content-type: application/json
+
+{
+  "bits": 256
+}   
+###
+//Retorno:
+{
+  "ok": true,
+  "bits": 256,
+  "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df",
+    "tk": "97c4c41d0fa1777df50358143f0a32cda3e673c8b31ea624a49612ed298070a"
+  }
+}
+###
+//Preparar dados para criar um novo bloco
+                // Assinando a mensagem com o hash camaleão gerado
+
+// Passo 02 - Assinar mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chhash
+content-type: application/json
+
+{
+    "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df",
+    "tk": "97c4c41d0fa1777df50358143f0a32cda3e673c8b31ea624a49612ed298070a"
+    },
+    "message": {"User_id": 3000000000, "message": "Teste mensagem original para hash camaleão"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df"
+  },
+  "msgHex": "7b22557365725f6964223a333030303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "115011d1a640051f30e3d91414ddade246d9d36bd2290e1a62ab938a604c14ae",
+  "s": "2a221169179dff27553b088ce3571cd6d1d51323e6cb1db843d1ce503fafa643",
+  "h": "11f6d0f7dd3f5859feb321074aea9ab5d56072d1c062eff902d091be27935290"
+}
+###
+
+//PASSO 3 - Verifica hash camaleão 
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+  "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df"
+  },
+  "bundle": {
+  "msgHex": "7b22557365725f6964223a333030303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "115011d1a640051f30e3d91414ddade246d9d36bd2290e1a62ab938a604c14ae",
+  "s": "2a221169179dff27553b088ce3571cd6d1d51323e6cb1db843d1ce503fafa643",
+  "h": "11f6d0f7dd3f5859feb321074aea9ab5d56072d1c062eff902d091be27935290"
+  }
+}
+###
+//Retorno:
+{
+  "ok": true,
+  "valid": true
+}
+
+###
+
+//Passo 04 - Fazer uma solicitação para criar um novo bloco
+                //sendo a primeira transação de usuário novo
+                //utilizando mensagem assinada com hash camaleão
+
+// Insere novo userdata e insere um novo bloco
+POST http://localhost:3000/addNewDataUser2
+content-type: application/json
+
+{
+"tx":{  
+    "userdata_id" : 2200000000,
+    "infodata" : {"User_id": 2200000000, "message": "Teste mensagem original para hash camaleão"},    
+    "ch_hash" : {"params":{
+     "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df"},
+                "bundle":{
+ "msgHex": "7b22557365725f6964223a333030303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "115011d1a640051f30e3d91414ddade246d9d36bd2290e1a62ab938a604c14ae",
+  "s": "2a221169179dff27553b088ce3571cd6d1d51323e6cb1db843d1ce503fafa643",
+  "h": "11f6d0f7dd3f5859feb321074aea9ab5d56072d1c062eff902d091be27935290"}}
+    
+}
+}
+###
+
+//Retorno: 
+{
+  "sucesso": true,
+  "message": "Novo usuário adicionado, bloco criado e inserido no filtro com sucesso.",
+  "blockData": {
+    "block_number": 103,
+    "parent_hash": "6690930f67ca724f5a40cc38f65e951967306a2acaeca36b2709e2bd7b43e97b",
+    "time_stamp": "2026-06-02T19:23:08.205Z",
+    "sealer_node_id": 1,
+    "origin_node_id": 1,
+    "ch_hash": {
+      "bundle": {
+        "h": "11f6d0f7dd3f5859feb321074aea9ab5d56072d1c062eff902d091be27935290",
+        "r": "115011d1a640051f30e3d91414ddade246d9d36bd2290e1a62ab938a604c14ae",
+        "s": "2a221169179dff27553b088ce3571cd6d1d51323e6cb1db843d1ce503fafa643",
+        "msgHex": "7b22557365725f6964223a333030303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d"
+      },
+      "params": {
+        "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+        "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+        "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+        "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df"
+      }
+    },
+    "userdata_address": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df",
+    "merk_hash": "bd7f238960588aea4437d7dfa77fefc2cfcb5a54e98dbd44a95f1d9be60b1232"
+  }
+}
+
+###
+
+//ATUALIZAÇÃO DE USERDATA - 
+
+//Atualizar um userdata existente
+  //utilizando mensagem assinada com hash camaleão
+
+//PASSO 05 - Gerar colisão hash camaleão para a nova mensagem, 
+                //utilizando a trapdoor key
+
+// Gera colisão hash camaleão
+POST http://localhost:3000/user/chcollision2
+content-type: application/json
+
+{
+    "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df",
+    "tk": "97c4c41d0fa1777df50358143f0a32cda3e673c8b31ea624a49612ed298070a"
+    },
+    "original": {
+    "msgHex": "11",
+    "r": "11",
+    "s": "11",
+    "h": "112"},
+    "newMessage": "Teste mensagem MODIFICADA para hash camaleão"
+  }
+###
+
+//Retorno:
+
+
+###
+
+//PASSO 6 - Verifica hash camaleão 
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+  "params": {
+    "p": "94f890a1d7f89ea1e833698bc3ae767e22c78264715b7b44d9c70c2e22c369ef",
+    "q": "4a7c4850ebfc4f50f419b4c5e1d73b3f1163c13238adbda26ce386171161b4f7",
+    "g": "419ea5d058197351bb291b598d7fb6d98142ec47812814f031af479549790f24",
+    "hk": "72f7d3b50e17c62e3a81a9db43653009c6ae14c42115f4b0ae5f82c8880c97df"
+  },
+  "bundle": {
+  "msgHex": "225465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f22",
+    "r": "308cc222bbd2eef4010ce5de4c37008b506f19d61a390e1e7dad5a017a81804d",
+    "s": "b1b8acbbff2f32b07986e617018d4df06dfa83530e886d4767a552872cc4a34",
+    "h": "452ae406657dc50153a68ccab0eb17378e3c4aba95b54dd8a103d2825bcbd90b"
+  }
+}
+###
+//Retorno:

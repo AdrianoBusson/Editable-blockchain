@@ -1,0 +1,22 @@
+// Geração de chaves hash camaleão
+ GET http://localhost:3000/params
+content-type: application/json
+
+{
+
+}
+
+###
+
+ POST http://localhost:3000/generate
+content-type: application/json
+
+
+{
+    "mnemonic": "test test test test test test test test test test test junk",
+    "path": "m/44'\''/60'\''/0'\''/0/0"
+}
+
+
+###
+

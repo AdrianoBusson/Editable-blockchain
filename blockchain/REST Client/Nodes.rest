@@ -1,0 +1,39 @@
+//Para rodar CTR+ALT+S
+
+// retorna nodes
+
+GET http://localhost:3000/nodes
+content-type: application/json
+
+{}
+
+###
+
+// Pesquisa um node by id
+
+GET http://localhost:3000/nodebyid/1
+content-type: application/json
+
+{}
+
+###
+
+
+// Insere Nodes
+
+
+POST http://localhost:3000/insertnode
+content-type: application/json
+
+{
+    "level": 2,
+    "node": "0x133496D5af790F022b8c14789B1aC52b71662935",
+    "pb_key": "0x04f5af0ed9f08c1884ad155c05a0ea0a4627dc10a06070a98856921c36507a500db7dab489e130c35a1e816f38b3ed354a1264383403bfc10e8e4c206c75c65",
+    "ip": "http://localhost:3003"
+}
+
+###
+
+
+
+##

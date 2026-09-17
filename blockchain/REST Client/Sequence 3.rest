@@ -1,0 +1,460 @@
+//Para rodar CTR+ALT+S
+
+//INICIAL - Parâmetros de usuário - Criar nova carteira e hash camaleãopara usuário
+
+// Paso 01 - Gerar nova carteira aleatóia do zero
+
+//Gerar nova carteira aleatóia do zero
+POST http://localhost:3000/user/address/ 
+content-type: application/json
+
+{}
+
+###
+
+//Retorno:
+{
+  "mode": "random",
+  "address": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+  "publicKey": "0x049133f444b9ab5abd52124412b71f9f8cb31392e647e389a919d4b455496c2e979864936614b24c33ccaaa435cd8289528f49cf7bc4b496a39646b9806744e38d",
+  "privateKey": "0xacdb523442017f5475b3d527077dccae5499ca9e1d5819086399c8a4d015a893",
+  "mnemonic": "inner riot spoil pyramid topic energy swift unlock antenna cake cancel outdoor"
+}
+###
+
+// Passo 02 - Gerar nova chave hash camaleão
+
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/keygen
+content-type: application/json
+
+{
+  "bits": 128
+}   
+###
+//Retorno:
+{
+  "ok": true,
+  "bits": 128,
+  "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb",
+    "tk": "1f9d1eba493f5044f1c1dba1cf95ac4f"
+  }
+}
+###
+
+//Preparar dados para criar um novo bloco
+                // Assinando a mensagem com o hash camaleão gerado
+
+// Passo 04 - Assina mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chhash
+content-type: application/json
+
+{
+    "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb",
+    "tk": "1f9d1eba493f5044f1c1dba1cf95ac4f"
+    },
+    "message": {"User_id": 1900000000, "message": "Teste mensagem original para hash camaleão"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb"
+  },
+  "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "21e5376cdc7fa73da3fe841bc2688964",
+  "s": "4161ea9d0597cac1701c07b0cc28d383",
+  "h": "278a85cf0343b1707ef42c7f29378506"
+}
+###
+
+//PASSO 4A - Verifica hash camaleão 
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+  "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb"
+  },
+  "bundle": {
+  "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "21e5376cdc7fa73da3fe841bc2688964",
+  "s": "4161ea9d0597cac1701c07b0cc28d383",
+  "h": "278a85cf0343b1707ef42c7f29378506"
+  }
+}
+###
+//Retorno:
+{
+  "ok": true,
+  "valid": true
+}
+###
+// Passo 05 - Assina o tx de usuário para validação
+//Assinar mensagem com private key
+POST http://localhost:3000/user/chcollision
+content-type: application/json
+
+{
+    "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb",
+    "tk": "1f9d1eba493f5044f1c1dba1cf95ac4f"},
+    "original": {
+    "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "21e5376cdc7fa73da3fe841bc2688964",
+  "s": "4161ea9d0597cac1701c07b0cc28d383",
+  "h": "278a85cf0343b1707ef42c7f29378506"},
+   "newMessage": "Teste mensagem MODIFICADA para hash camaleão"
+  }
+###
+//retorno:
+{
+  "ok": true,
+  "params": {
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb"
+  },
+  "original": {
+    "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+    "r": "21e5376cdc7fa73da3fe841bc2688964",
+    "s": "4161ea9d0597cac1701c07b0cc28d383",
+    "h": "278a85cf0343b1707ef42c7f29378506"
+  },
+  "modified": {
+    "msgPlain": "Teste mensagem MODIFICADA para hash camaleão",
+    "msgHex": "225465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f22",
+    "r": "2c15b007742eb1e76c5591b0ba91ef5d",
+    "s": "315c0a93155395bd318f31b04eab37be",
+    "h": "278a85cf0343b1707ef42c7f29378506"
+  },
+  "sameHashAsOriginal": true
+}
+###
+POST http://localhost:3000/user/sign-transaction
+content-type: application/json
+
+{
+    "keyType": "privateKey",
+    "privateKey": "0xacdb523442017f5475b3d527077dccae5499ca9e1d5819086399c8a4d015a893",
+    "tx": {  
+    "userdata_id" : 1900000000,
+    "userdata_address": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+    "userdata_pb_key": "0x049133f444b9ab5abd52124412b71f9f8cb31392e647e389a919d4b455496c2e979864936614b24c33ccaaa435cd8289528f49cf7bc4b496a39646b9806744e38d",
+    "infodata" : {"User_id": 1900000000, "message": "Teste mensagem original para hash camaleão"},    
+    "ch_hash" : {"params":{
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb"},
+        "bundle":{
+  "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "21e5376cdc7fa73da3fe841bc2688964",
+  "s": "4161ea9d0597cac1701c07b0cc28d383",
+  "h": "278a85cf0343b1707ef42c7f29378506"}}
+    
+}
+  }
+
+###
+//Retorno:
+{
+  "from": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+  "txId": "0x2864661a568b6b4b7d537ecfd1ab2220fe679e418277877a54bb46821f1a6066",
+  "digest": "0x2864661a568b6b4b7d537ecfd1ab2220fe679e418277877a54bb46821f1a6066",
+  "signature": "0xf8309129969213c4ce18f4e95e2ab4578f4d64285c651155aed25d4e83db9c717984ea59fa2cc160fc8997a70d3873465e3285034d15a8cb93611589f2d7eae61c",
+  "signatureParts": {
+    "r": "0xf8309129969213c4ce18f4e95e2ab4578f4d64285c651155aed25d4e83db9c71",
+    "s": "0x7984ea59fa2cc160fc8997a70d3873465e3285034d15a8cb93611589f2d7eae6",
+    "v": 28
+  },
+  "canonicalTx": {
+    "ch_hash": {
+      "bundle": {
+        "h": "278a85cf0343b1707ef42c7f29378506",
+        "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+        "r": "21e5376cdc7fa73da3fe841bc2688964",
+        "s": "4161ea9d0597cac1701c07b0cc28d383"
+      },
+      "params": {
+        "g": "55044a3495d849fe9feba0f9f075474d",
+        "hk": "3d7b5a71c56025aeba9cd20753d542cb",
+        "p": "d3bb6899949062c0243aada701607647",
+        "q": "69ddb44cca483160121d56d380b03b23"
+      }
+    },
+    "infodata": {
+      "User_id": 1900000000,
+      "message": "Teste mensagem original para hash camaleão"
+    },
+    "userdata_address": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+    "userdata_id": 1900000000,
+    "userdata_pb_key": "0x049133f444b9ab5abd52124412b71f9f8cb31392e647e389a919d4b455496c2e979864936614b24c33ccaaa435cd8289528f49cf7bc4b496a39646b9806744e38d"
+  }
+}
+###
+
+//Passo 06 - Fazer uma solicitação para criar um novo bloco
+                //sendo a primeira transação de usuário novo
+                //utilizando mensagem assinada com hash camaleão
+                // e usuário assinado com private key
+// Insere novo userdata e insere um novo bloco
+POST http://localhost:3000/addNewDataUser2
+content-type: application/json
+
+{
+
+    "signature": "0xf8309129969213c4ce18f4e95e2ab4578f4d64285c651155aed25d4e83db9c717984ea59fa2cc160fc8997a70d3873465e3285034d15a8cb93611589f2d7eae61c",
+
+"tx":{  
+    "userdata_id" : 2200000000,
+    "userdata_address": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+    "userdata_pb_key": "0x049133f444b9ab5abd52124412b71f9f8cb31392e647e389a919d4b455496c2e979864936614b24c33ccaaa435cd8289528f49cf7bc4b496a39646b9806744e38d",
+    "infodata" : {"User_id": 2200000000, "message": "Teste mensagem original para hash camaleão"},    
+    "ch_hash" : {"params":{
+    "p": "d3bb6899949062c0243aada701607647",
+    "q": "69ddb44cca483160121d56d380b03b23",
+    "g": "55044a3495d849fe9feba0f9f075474d",
+    "hk": "3d7b5a71c56025aeba9cd20753d542cb"},
+                "bundle":{
+  "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d",
+  "r": "21e5376cdc7fa73da3fe841bc2688964",
+  "s": "4161ea9d0597cac1701c07b0cc28d383",
+  "h": "278a85cf0343b1707ef42c7f29378506"}}
+    
+}
+}
+###
+
+//Retorno: 
+{
+  "sucesso": true,
+  "message": "Novo usuário adicionado, bloco criado e inserido no filtro com sucesso.",
+  "blockData": {
+    "block_number": 97,
+    "parent_hash": "702fea0bb67654229a20bfe4d9e39e21d0722507b706f184b32a457a3ebb969e",
+    "time_stamp": "2026-05-08T15:39:13.659Z",
+    "sealer_node_id": 1,
+    "origin_node_id": 1,
+    "ch_hash": {
+      "bundle": {
+        "h": "278a85cf0343b1707ef42c7f29378506",
+        "r": "21e5376cdc7fa73da3fe841bc2688964",
+        "s": "4161ea9d0597cac1701c07b0cc28d383",
+        "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d"
+      },
+      "params": {
+        "g": "55044a3495d849fe9feba0f9f075474d",
+        "p": "d3bb6899949062c0243aada701607647",
+        "q": "69ddb44cca483160121d56d380b03b23",
+        "hk": "3d7b5a71c56025aeba9cd20753d542cb"
+      }
+    },
+    "userdata_address": "0x6a83b78c5160F0a0A8B97834eD3Bc1d3105Db0eD",
+    "merk_hash": "6678233aaa6a025af04df46a2ea152097d591ea52d4b147f78800700407f75c3"
+  }
+}
+###
+
+//ATUALIZAÇÃO DE USERDATA - 
+
+//Atualizar um userdata existente
+  //utilizando mensagem assinada com hash camaleão
+  // e usuário assinado com private key
+
+//PASSO 08 - Gerar colisão hash camaleão para a nova mensagem, 
+                //utilizando a trapdoor key
+
+// Gera colisão hash camaleão
+POST http://localhost:3000/user/chcollision
+content-type: application/json
+
+{
+    "params": {
+    "p": "9026f01ed2685dc01b9568f2f2bad4a5",
+    "q": "4813780f69342ee00dcab479795d6a52",
+    "g": "82122980a5e95cb1902bab683ac05b73",
+    "hk": "4d6e01a01dd564e8ac45af9f95d0fc21",
+    "tk": "af81a8a7ecf700cf8e967b43cee3f86"
+    },
+    "original": {
+    "msgHex": "5465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f",
+        "h": "31e1ec9d3b4377afd011c334ec9c3223",
+        "r": "bfce87d718e3f2537ac9ec56d46c1d",
+        "s": "3abbd7da5225e69ff4bd2fdf7b65b919"},
+   "newMessage": "Teste mensagem MODIFICADA para hash camaleão"
+  }
+###
+
+//Retorno:
+{
+  "ok": true,
+  "params": {
+    "p": "9026f01ed2685dc01b9568f2f2bad4a5",
+    "q": "4813780f69342ee00dcab479795d6a52",
+    "g": "82122980a5e95cb1902bab683ac05b73",
+    "hk": "4d6e01a01dd564e8ac45af9f95d0fc21"
+  },
+  "original": {
+    "msgHex": "5465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f",
+    "r": "bfce87d718e3f2537ac9ec56d46c1d",
+    "s": "3abbd7da5225e69ff4bd2fdf7b65b919",
+    "h": "31e1ec9d3b4377afd011c334ec9c3223"
+  },
+  "modified": {
+    "msgPlain": "Teste mensagem MODIFICADA para hash camaleão",
+    "msgHex": "5465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f",
+    "r": "19f085a2687569cbb7aa90b31beeea74",
+    "s": "17477ca398897b2debd6a63e7a65ec1b",
+    "h": "31e1ec9d3b4377afd011c334ec9c3223"
+  },
+  "sameHashAsOriginal": true
+}
+###
+
+//PASSO 09 - Assina o tx de usuário para validação
+            //Assinar mensagem com private key
+
+
+POST http://localhost:3000/user/sign-transaction
+content-type: application/json
+
+{
+    "keyType": "privateKey",
+    "privateKey": "0xa38551b9bcba1d66e8eb25324d22eb46f310158bf1b11f65a87cdc14e73b5ee2",
+    "tx": {  
+    "userdata_id" : 1800000000,
+    "userdata_address": "0xbb20011b317532883Dcb4FA3469d1B41f22F633A",
+    "userdata_pb_key": "0x0487ebd54947254cd01f5eab7f3c85ae30d843d4ecbca8dbc67534d70ea6285ea2fa2b6d072d14590c2b798b915e9bc6f10ad87212aa86b9488bdf1f3a08bcd85e",
+    "infodata" : "Teste mensagem MODIFICADA para hash camaleão",    
+    "ch_hash" : {"params":{
+    "p": "9026f01ed2685dc01b9568f2f2bad4a5",
+    "q": "4813780f69342ee00dcab479795d6a52",
+    "g": "82122980a5e95cb1902bab683ac05b73",
+    "hk": "4d6e01a01dd564e8ac45af9f95d0fc21"},
+        "bundle":{
+    "msgHex": "5465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f",
+    "r": "19f085a2687569cbb7aa90b31beeea74",
+    "s": "17477ca398897b2debd6a63e7a65ec1b",
+    "h": "31e1ec9d3b4377afd011c334ec9c3223"}}
+    
+}
+  }
+
+###
+//Retorno:
+{
+  "from": "0xbb20011b317532883Dcb4FA3469d1B41f22F633A",
+  "txId": "0x28966f5a1b73276dc51f304841260af7f11a0abdbc914a91107c69b9a95b5cb3",
+  "digest": "0x28966f5a1b73276dc51f304841260af7f11a0abdbc914a91107c69b9a95b5cb3",
+  "signature": "0x3ae9c95672dba97ab08b57aa6c5bbf2e52d2a6b9ea090795685e5089ea51c08d66e879c2df222b634518c7b885e7ab50cbf7aa6d5c88ea49e75d91fa1ff890081b",
+  "signatureParts": {
+    "r": "0x3ae9c95672dba97ab08b57aa6c5bbf2e52d2a6b9ea090795685e5089ea51c08d",
+    "s": "0x66e879c2df222b634518c7b885e7ab50cbf7aa6d5c88ea49e75d91fa1ff89008",
+    "v": 27
+  },
+  "canonicalTx": {
+    "ch_hash": {
+      "bundle": {
+        "h": "31e1ec9d3b4377afd011c334ec9c3223",
+        "msgHex": "5465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f",
+        "r": "19f085a2687569cbb7aa90b31beeea74",
+        "s": "17477ca398897b2debd6a63e7a65ec1b"
+      },
+      "params": {
+        "g": "82122980a5e95cb1902bab683ac05b73",
+        "hk": "4d6e01a01dd564e8ac45af9f95d0fc21",
+        "p": "9026f01ed2685dc01b9568f2f2bad4a5",
+        "q": "4813780f69342ee00dcab479795d6a52"
+      }
+    },
+    "infodata": "Teste mensagem MODIFICADA para hash camaleão",
+    "userdata_address": "0xbb20011b317532883Dcb4FA3469d1B41f22F633A",
+    "userdata_id": 1800000000,
+    "userdata_pb_key": "0x0487ebd54947254cd01f5eab7f3c85ae30d843d4ecbca8dbc67534d70ea6285ea2fa2b6d072d14590c2b798b915e9bc6f10ad87212aa86b9488bdf1f3a08bcd85e"
+  }
+}
+###
+
+//PASSO 10 - Fazer uma solicitação para atualizar o userdata existente
+                //sendo a transação de atualização de usuário
+                //utilizando mensagem assinada com hash camaleão
+                // e tx de usuário assinado com private key
+    
+
+// atualiza um userdata existente
+POST http://localhost:3000/updateuserdata
+content-type: application/json
+
+{
+     "signature": "0x3ae9c95672dba97ab08b57aa6c5bbf2e52d2a6b9ea090795685e5089ea51c08d66e879c2df222b634518c7b885e7ab50cbf7aa6d5c88ea49e75d91fa1ff890081b",
+
+"tx":{
+    "ch_hash": {
+      "bundle": {
+        "h": "31e1ec9d3b4377afd011c334ec9c3223",
+        "msgHex": "5465737465206d656e736167656d204d4f4449464943414441207061726120686173682063616d616c65c3a36f",
+        "r": "19f085a2687569cbb7aa90b31beeea74",
+        "s": "17477ca398897b2debd6a63e7a65ec1b"
+      },
+      "params": {
+        "g": "82122980a5e95cb1902bab683ac05b73",
+        "hk": "4d6e01a01dd564e8ac45af9f95d0fc21",
+        "p": "9026f01ed2685dc01b9568f2f2bad4a5",
+        "q": "4813780f69342ee00dcab479795d6a52"
+      }
+    },
+    "infodata": "Teste mensagem MODIFICADA para hash camaleão",
+    "userdata_address": "0xbb20011b317532883Dcb4FA3469d1B41f22F633A",
+    "userdata_id": 1800000000,
+    "userdata_pb_key": "0x0487ebd54947254cd01f5eab7f3c85ae30d843d4ecbca8dbc67534d70ea6285ea2fa2b6d072d14590c2b798b915e9bc6f10ad87212aa86b9488bdf1f3a08bcd85e"
+  }
+}
+###
+
+
+//TESTE
+
+
+POST http://localhost:3000/user/chcollision
+content-type: application/json
+
+{
+    "params": {
+      "g": "55044a3495d849fe9feba0f9f075474d",
+      "p": "d3bb6899949062c0243aada701607647",
+      "q": "69ddb44cca483160121d56d380b03b23",
+      "hk": "3d7b5a71c56025aeba9cd20753d542cb",
+      "tk": "1f9d1eba493f5044f1c1dba1cf95ac4f"
+    },
+    "original": {
+      "h": "278a85cf0343b1707ef42c7f29378506",
+      "r": "21e5376cdc7fa73da3fe841bc2688964",
+      "s": "4161ea9d0597cac1701c07b0cc28d383",
+      "msgHex": "7b22557365725f6964223a313930303030303030302c226d657373616765223a225465737465206d656e736167656d206f726967696e616c207061726120686173682063616d616c65c3a36f227d"
+    },
+    "newMessage": {
+      "User_id": 1900000000,
+      "message": "Teste mensagem original para hash camaleão"
+    }
+  }
+###

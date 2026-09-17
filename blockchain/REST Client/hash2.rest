@@ -1,0 +1,45 @@
+// Assina mensagem original
+ POST http://localhost:3000/keygenoriginal
+content-type: application/json
+
+{
+  "bits": 128
+}
+
+###
+
+ GET http://localhost:3000/keygen
+content-type: application/json
+
+{}
+
+###
+
+
+// Assina mensagem original
+POST http://localhost:3000/hash
+
+{
+  "message": "Mensagem original",
+  "params": 
+  { 
+  "p": "aeb5ad402086915ad9b50de7e231af89bc0b707799f164b8e62092a2720e3b5ca1630d6cfa3912ad4ebef1219c89bc80df1394f1a9532d815e0e37a8b0bd16df", 
+  "q": "575ad6a0104348ad6cda86f3f118d7c4de05b83bccf8b25c7310495139071dae50b186b67d1c8956a75f7890ce44de406f89ca78d4a996c0af071bd4585e8b6f", 
+  "g": "2", 
+  "hk": "6773c6ec94123e6104595e061dc9f18ddcffe3dc092aa0693fda5ce5d959f61a454c629b9bca7b617bab0ebeadc70b89e71d6e9c3240d78a957e0018a1c9122e" 
+  }
+}
+
+###
+
+Hash 01
+{
+  "params": {
+    "p": "aeb5ad402086915ad9b50de7e231af89bc0b707799f164b8e62092a2720e3b5ca1630d6cfa3912ad4ebef1219c89bc80df1394f1a9532d815e0e37a8b0bd16df",
+    "q": "575ad6a0104348ad6cda86f3f118d7c4de05b83bccf8b25c7310495139071dae50b186b67d1c8956a75f7890ce44de406f89ca78d4a996c0af071bd4585e8b6f",
+    "g": "2",
+    "hk": "6773c6ec94123e6104595e061dc9f18ddcffe3dc092aa0693fda5ce5d959f61a454c629b9bca7b617bab0ebeadc70b89e71d6e9c3240d78a957e0018a1c9122e",
+    "tk": "517c2fd492142604d199162a9a73ca227cca94eeab3ace4add9f1691269e819a5cc3b0b3919061da725fbe685fdaf5ea2cacd356146b103a3797f8d7e1a639c9"
+  }
+}
+

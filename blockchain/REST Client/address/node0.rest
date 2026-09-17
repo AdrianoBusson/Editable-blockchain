@@ -1,0 +1,83 @@
+// Passo 02 - Assinar mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chamhash
+content-type: application/json
+
+{
+    "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+    },
+    "infodata": {"User_id": 1, "message": "Bloco Zero"}
+  }
+###
+//Retorno: 
+{
+  "ok": true,
+  "xp": {
+    "r": "78312748201231575321872567180133362303",
+    "s": "298520273973383733859456065981219590657"
+  },
+  "hash": "255334620852218362607879766559458445574"
+}
+###
+//PASSO 3 - Verifica hash camaleão 
+POST http://localhost:3000/chamverify
+content-type: application/json
+
+{
+  "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"
+  },
+  "hash": "255334620852218362607879766559458445574",
+  "infodata": {"User_id": 1, "message": "Bloco Zero"},
+  "xp": {
+    "r": "78312748201231575321872567180133362303",
+    "s": "298520273973383733859456065981219590657"
+  }
+}   
+ 
+###
+//Retorno:
+
+{
+  "hash": "255334620852218362607879766559458445574",
+  "valid": true
+}
+
+####
+
+//Passo 03 - Fazer uma solicitação para criar um novo bloco
+                //sendo a primeira transação de usuário novo
+                //utilizando mensagem assinada com hash camaleão
+
+// Insere novo userdata e insere um novo bloco  4000000000
+POST http://localhost:3000/addNewDataUser
+content-type: application/json
+
+{
+"tx":{  
+    "userdata_id" : 1,
+    "infodata" : {"User_id": 1, "message": "Bloco Zero"},    
+    "ch_hash" : {
+        "publicKey": {
+    "p": "648381412840268055894789320315838648443",
+    "q": "324190706420134027947394660157919324221",
+    "g": "210541243631077037201866261480409723928",
+    "y": "190122106412543002573693484360354515267"},
+
+    "hash": "255334620852218362607879766559458445574",
+
+   "xp": {
+    "r": "78312748201231575321872567180133362303",
+    "s": "298520273973383733859456065981219590657"}
+    }
+    
+}
+}
+###
+//Retorno: 

@@ -1,0 +1,277 @@
+// Geração de chaves hash camaleão
+ POST http://localhost:3000/user/keygen
+content-type: application/json
+
+{
+  "bits": 128
+}
+
+###
+retorno hash 01
+
+{
+  "ok": true,
+  "bits": 128,
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "hk": "534f43a05c7de9aec18801e866df99e6",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+  }
+}
+###
+
+// Assina mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chhash
+content-type: application/json
+
+{
+    "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab", 
+    "q": "5ebf868ff855e94c4ac8275111b46d55", 
+    "g": "4e2a3b1559374c226f58d43bb48dbc13", 
+    "hk": "534f43a05c7de9aec18801e866df99e6",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+    },
+    "message": "Sem saber que era impossível, foi lá e fez. - Jean Cocteau"
+  }
+###
+
+recebido
+{
+  "ok": true,
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "hk": "534f43a05c7de9aec18801e866df99e6"
+  },
+  "msgPlain": "Sem saber que era impossível, foi lá e fez. - Jean Cocteau",
+  "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+  "r": "3f68f7e4f1ead3609282a226fb8a76d",
+  "s": "3ff49da23e6b9c513e904ff675aa9b20",
+  "h": "182f7f859efea5fb7add82d65f5caf50"
+}
+###
+
+//Verifica Hash Camaleão
+
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+    "params": {
+      "p": "bd7f0d1ff0abd29895904ea22368daab",
+      "q": "5ebf868ff855e94c4ac8275111b46d55",
+      "g": "4e2a3b1559374c226f58d43bb48dbc13",
+      "hk": "534f43a05c7de9aec18801e866df99e6"
+    },
+    "bundle": {
+      "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+      "r": "3f68f7e4f1ead3609282a226fb8a76d",
+      "s": "3ff49da23e6b9c513e904ff675aa9b20",
+      "h": "182f7f859efea5fb7add82d65f5caf50"
+    }
+  }
+
+###
+
+recebido
+
+{
+  "ok": true,
+  "valid": true
+}
+
+###
+
+// Gera colisão hash camaleão
+POST http://localhost:3000/user/chcollision
+content-type: application/json
+
+{
+    "params": {
+      "p": "bd7f0d1ff0abd29895904ea22368daab",
+      "q": "5ebf868ff855e94c4ac8275111b46d55",
+      "g": "4e2a3b1559374c226f58d43bb48dbc13",
+      "hk": "534f43a05c7de9aec18801e866df99e6",
+      "tk": "3c123d27094b70c1e34d512c95c9308f"
+     
+    },
+    "original": {
+      "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+      "r": "3f68f7e4f1ead3609282a226fb8a76d",
+      "s": "3ff49da23e6b9c513e904ff675aa9b20",
+      "h": "182f7f859efea5fb7add82d65f5caf50"
+    },
+   "newMessage": "Se você pode sonhar, você pode fazer. - Walt Disney"
+  }
+###
+
+Retorno
+{
+  "ok": true,
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "hk": "534f43a05c7de9aec18801e866df99e6"
+  },
+  "original": {
+    "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+    "r": "3f68f7e4f1ead3609282a226fb8a76d",
+    "s": "3ff49da23e6b9c513e904ff675aa9b20",
+    "h": "182f7f859efea5fb7add82d65f5caf50"
+  },
+  "modified": {
+    "msgPlain": "Se você pode sonhar, você pode fazer. - Walt Disney",
+    "msgHex": "536520766f63c3aa20706f646520736f6e6861722c20766f63c3aa20706f64652066617a65722e202d2057616c74204469736e6579",
+    "r": "446a4bfe9c6cbdd1e721a29a35c2ac7a",
+    "s": "28929b2973a15b4a9cb8787623472ef5",
+    "h": "182f7f859efea5fb7add82d65f5caf50"
+  },
+  "sameHashAsOriginal": true
+}
+###
+
+//Verifica Hash Camaleão da colisão gerada
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+    "params": {
+      "p": "bd7f0d1ff0abd29895904ea22368daab",
+      "q": "5ebf868ff855e94c4ac8275111b46d55",
+      "g": "4e2a3b1559374c226f58d43bb48dbc13",
+      "hk": "534f43a05c7de9aec18801e866df99e6"
+    },
+    "bundle": {
+      "msgHex": "536520766f63c3aa20706f646520736f6e6861722c20766f63c3aa20706f64652066617a65722e202d2057616c74204469736e6579",
+      "r": "446a4bfe9c6cbdd1e721a29a35c2ac7a",
+      "s": "28929b2973a15b4a9cb8787623472ef5",
+      "h": "182f7f859efea5fb7add82d65f5caf50"
+    }
+  }
+
+###
+retorno
+{
+  "ok": true,
+  "valid": true
+}
+####
+
+//Gerar novos parâmetros com a mesma trapdoor
+POST http://localhost:3000/user/derive-params
+content-type: application/json
+
+{
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+  }
+}
+
+###
+retorno
+{
+  "ok": true,
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "hk": "534f43a05c7de9aec18801e866df99e6",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+  }
+}
+###
+
+
+
+// Assina mensagem original com o chhash derivado
+POST http://localhost:3000/user/chhash
+content-type: application/json
+
+{
+    "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab", 
+    "q": "5ebf868ff855e94c4ac8275111b46d55", 
+    "g": "4e2a3b1559374c226f58d43bb48dbc13", 
+    "hk": "37b4548e04c62f20f7c5d3fbca501aa4",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+    },
+    "message": "Sem saber que era impossível, foi lá e fez. - Jean Cocteau"
+  }
+###
+
+retorna
+{
+  "ok": true,
+  "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab",
+    "q": "5ebf868ff855e94c4ac8275111b46d55",
+    "g": "4e2a3b1559374c226f58d43bb48dbc13",
+    "hk": "37b4548e04c62f20f7c5d3fbca501aa4"
+  },
+  "msgPlain": "Sem saber que era impossível, foi lá e fez. - Jean Cocteau",
+  "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+  "r": "1553f5fd76c0747e96e04e231a675cb3",
+  "s": "1547f739647aacfec41f7342930d29f6",
+  "h": "26fcb9fafbb39393f092fed888f921a8"
+}
+###
+// verifica como parâmetros derivados
+POST http://localhost:3000/chverify
+content-type: application/json
+
+{
+    "params": {
+      "p": "bd7f0d1ff0abd29895904ea22368daab",
+      "q": "5ebf868ff855e94c4ac8275111b46d55",
+      "g": "4e2a3b1559374c226f58d43bb48dbc13",
+      "hk": "37b4548e04c62f20f7c5d3fbca501aa4"
+    },
+    "bundle": {
+      "msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175",
+      "r": "1553f5fd76c0747e96e04e231a675cb3",
+      "s": "1547f739647aacfec41f7342930d29f6",
+      "h": "26fcb9fafbb39393f092fed888f921a8"
+    }
+  }
+
+###
+
+// OBS: Com apenas uma trapdoor (tk) é possível derivar múltiplos parâmetros (hk) que permitem assinar e verificar a mesma mensagem gerando o mesmo hash.
+// Isto reforça a propriedade camaleônica do hash onde múltiplas assinaturas podem levar ao mesmo hash dependendo dos parâmetros usados.
+// Uma entidade pode manter sua trapdoor em segredo e derivar diferentes chaves públicas conforme necessário para diferentes contextos, mantendo a capacidade de gerar colisões controladas.
+// Por exemplo, uma entidade pode usar diferentes chaves públicas para diferentes contratos ou transações, mas ainda ser capaz de gerar colisões para esses hashes usando sua trapdoor secreta.
+
+GET http://localhost:3000/hash_sha_256
+content-type: application/json
+
+{
+    "data": "Teste de hash SHA-256 a"
+}
+###
+
+
+
+// Assina mensagem original com o chhash  gerado
+POST http://localhost:3000/user/chhash
+content-type: application/json
+
+{
+    "params": {
+    "p": "bd7f0d1ff0abd29895904ea22368daab", 
+    "q": "5ebf868ff855e94c4ac8275111b46d55", 
+    "g": "4e2a3b1559374c226f58d43bb48dbc13", 
+    "hk": "534f43a05c7de9aec18801e866df99e6",
+    "tk": "3c123d27094b70c1e34d512c95c9308f"
+    },
+    "message": "Dado 1B"
+  }
+###
+

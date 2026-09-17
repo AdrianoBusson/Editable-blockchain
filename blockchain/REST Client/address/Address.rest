@@ -1,0 +1,112 @@
+//Para rodar CTR+ALT+S
+
+//Gerar nova carteira aleatóia do zero
+POST http://localhost:3000/user/address/ 
+content-type: application/json
+
+{}
+
+###
+
+//Gerar endereço a partir de uma private key
+
+POST http://localhost:3000/user/address/ 
+content-type: application/json
+
+{
+    "mode":"privateKey",
+    "privateKey":"0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
+  }
+
+###
+
+//Gerar carteira apartir de menemônico
+
+POST http://localhost:3000/user/address/ 
+content-type: application/json
+
+{
+    "mode":"mnemonic",
+    "mnemonic":"test test test test test test test test test test test junk"
+  }
+
+###
+address 00 
+{
+  "mode": "random",
+  "address": "0x09141BbB5C0f43E8350518A3001406F565D56f4D",
+  "publicKey": "0x0491ce2c9028629e16cca424001751855881263eb812028725454d20bbe0b2aeac0ccd4dfdb1b65ad11bbde09bcdd712c6bbef48a3fcb8d5f27f9dc54c9bad02e3",
+  "privateKey": "0x4d453fa4251d6257a2da9ac04dd125d27b9c03b3bb6fef3edc6a9b8d0dee8049",
+  "mnemonic": "rack garbage head car jelly mention purchase lend airport athlete danger faint"
+}
+Address 01 Administrador do nó 1
+{
+  "mode": "random",
+  "address": "0x935467B604133a4BB82100fc121982812A09D10d",
+  "publicKey": "0x041ea31a1342fdd30094421f8554d7f9ae2ef4370914cc5af6c9c38997de9df93f45889cb14d136f4bcebf409fe6eac035d3e31786fe8be99d14fb55a19e373605",
+  "privateKey": "0xb46de23a63619e70514502e4baae28af632f040ee84b387e6e19bf16fb57fed7",
+  "mnemonic": "useless negative post once have merry ridge roast garment since joy slight"
+}
+
+Address 02
+
+{
+  "mode": "random",
+  "address": "0x5e894225ae418c7051DAA69AA359751159Aca1c5",
+  "publicKey": "0x04f1f5ff3b69b628f0dc23df72c41f9ccb73424f2e522affdb06d286529f2566cb5e5560f3d9920bbabe6e4e70c72ba1332da1328c73ea0d99164d2b5ca5fa1314",
+  "privateKey": "0xaebe2abdbe8bf164a213c2ab4c10cab575dc3e028d99871647fe859b021c4642",
+  "mnemonic": "useless echo term need rally season pact sure you prison gorilla expand"
+}
+
+Address 03
+{
+  "mode": "random",
+  "address": "0xaa9BA077271e4c7e9ae6466F87CA4E2DE5739Cc1",
+  "publicKey": "0x041068ff71913df7edbd50f61e7025400309b36d8600794ccdf4435832893b4d7382d40cf2b7c4074d34adb722a30a7324c0f2688c5b67fbb0dce6e353c78f7258",
+  "privateKey": "0x8240cc0ddba9d0c2dd5fd6e7b6738a139ac7cb5d163451e8eec2acc734227221",
+  "mnemonic": "salute hazard seek meat inhale wrap first service voice mistake glimpse boring"
+}
+
+address 05
+{
+  "mode": "random",
+  "address": "0xbaF3A5d877FFa3870e449f50d31DdA276Ab98917",
+  "publicKey": "0x042a9242e07cb1cc135a5bcf4b9eb411e9baa02630001d9581c62a4462e21b473817a38aebda0ebf56228be57ecb49dd6e23ee6dc87d7b50e7f6101553f908b242",
+  "privateKey": "0x83c108b6232992d726042132f2cff9e6dea0cf6223902e2eb02dbf9d3492d499",
+  "mnemonic": "recipe trap hybrid key sauce portion three border awesome maple aspect sibling"
+}
+
+address 06
+{
+  "mode": "random",
+  "address": "0x5289A910321e7A70F4e856cB10818e94C89Ef7E8",
+  "publicKey": "0x04aaa3d373b50f61c35b772bfa59893e6c3bf4bc8289d52bf6ad245ad2fa4bd1d85b16ee3bc200ffe583486f645865f4de660493c8e1c4b7483e00f46afa04bb8f",
+  "privateKey": "0xa15b02e9aa57ca16cc15c1a3386a9887f489c2d58a4f09e3c35ba8d4193bfe53",
+  "mnemonic": "amazing any wing cabbage tag shadow model midnight clerk tribe unusual pistol"
+}
+
+address 07
+{
+  "mode": "random",
+  "address": "0x5d3D733DC63fd83fCE4F51bAe6fbdeF415472612",
+  "publicKey": "0x048f721a31f2cc4715e9be98a59014131a7c9d433ae40116f3db9a12dec4ffcaee8bb0bdc70cf1319d9add9512813f44da173d1b41e431708ce27bc4181058d307",
+  "privateKey": "0xed4671be650e9f7cf3abb61d39dca8c2b8e61682ff4481c264ddc86fab056f0c",
+  "mnemonic": "famous romance harvest same often radio age march pattern tattoo buyer dutch"
+}
+
+address 08
+{
+  "mode": "random",
+  "address": "0x8FEC4F006F241f009D607e98d65ab76b91c1271B",
+  "publicKey": "0x04793231150f2549740450dd78b4d043a19c13f1b56e39f6fd1acbb194afdb940dec7efb44926fcdf8f8d549ec3b5ec74c488b055138184df14b711d12860f262d",
+  "privateKey": "0x23e2b8e6459f86258e8c57d55673a6cd328966e63401784c535e55cfcfd4c9eb",
+  "mnemonic": "toy abstract orange decide ozone chalk normal congress immune seminar code fit"
+}
+address 09
+{
+  "mode": "random",
+  "address": "0x5d431FF8A0424Bad01D883Df561Ba6480592FD5d",
+  "publicKey": "0x04c727003a0d82d48b030b6398a9053b5a3e6592bfe30202e47068a921ad259b9805dc57128ddda3fd6bf984f4badc51e2413de41856ad93961d4df2f23528035b",
+  "privateKey": "0xa70c8d4b8db8c304d5723110dd0911701345e87e2e5ef895681f126f91ce2b92",
+  "mnemonic": "hospital forward fog call agent noise indoor demise chest absurd drum sunset"
+}

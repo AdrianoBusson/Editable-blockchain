@@ -1,0 +1,129 @@
+//Para rodar CTR+ALT+S
+
+//retorna todos os blocos
+
+GET http://localhost:3000/blocks
+content-type: application/json 
+
+{}
+
+###
+
+// retorna o último bloco
+GET http://localhost:3000/lastblock
+content-type: application/json
+
+{}
+
+###
+
+// retorna o último bloco incluindo merk_hash
+GET http://localhost:3000/lastFullblock
+content-type: application/json
+
+{}
+
+###
+
+// retorna o hash do último bloco
+GET http://localhost:3000/lastblockhash
+content-type: application/json
+
+{}
+
+###
+
+// Insere novo userdata e insere um novo bloco
+POST http://localhost:3000/addNewDataUser
+content-type: application/json
+
+{  
+    "userdata_id" : 1300000000,
+    "userdata_address": "0x09141BbB5C0f43E8350518A3001406F565D56f4C",
+    "userdata_pb_key": "0x0491ce2c9028629e16cca424001751855881263eb812028725454d20bbe0b2aeac0ccd4dfdb1b65ad11bbde09bcdd712c6bbef48a3fcb8d5f27f9dc54c9bad02e5",
+    "infodata" : {"to": "user-123", "nonce": 1, "chainId": "0xMinhaChain", "mensagem": "hello"},
+    "ch_hash" : {"params":{"p":"bd7f0d1ff0abd29895904ea22368daab","q":"5ebf868ff855e94c4ac8275111b46d55","g":"4e2a3b1559374c226f58d43bb48dbc13","hk":"534f43a05c7de9aec18801e866df99e6"},"bundle":{"msgHex": "53656d207361626572207175652065726120696d706f7373c3ad76656c2c20666f69206cc3a120652066657a2e202d204a65616e20436f6374656175","r":"3f68f7e4f1ead3609282a226fb8a76d","s":"3ff49da23e6b9c513e904ff675aa9b20","h":"182f7f859efea5fb7add82d65f5caf50"}}
+    
+}
+
+###
+
+// atualiza um userdata existente
+POST http://localhost:3000/updateuserdata
+content-type: application/json
+
+{
+ 
+    "userdata_address": "0x09141BbB5C0f43E8350518A3001406F565D56f4C",
+    "infodata" : {"to": "user-123", "nonce": 1, "chainId": "0xMinhaChain", "mensagem": "hello"}
+    
+}
+###
+//Calcula o hash de um bloco
+POST http://localhost:3000/calcblockhash
+content-type: application/json 
+
+{"block_number": 0}
+###
+
+//Retorna todas as informações de um bloco
+POST http://localhost:3000/calcblockhash
+content-type: application/json 
+
+{"block_number": 31}
+###
+
+// retorna o bloco completo de um ID específico
+POST http://localhost:3000/user/fullblockbyID
+content-type: application/json
+
+{"block_number": 1}
+
+###
+
+// retorna os bloco completo dos últimos blocos
+POST http://localhost:3000/user/blockslimit
+content-type: application/json
+
+{"blocks": 3}
+
+###
+
+// retorna os bloco completo dos últimos blocos
+GET http://localhost:3000/user/lastblockID
+content-type: application/json
+
+{}
+
+###
+
+// retorna os bloco completo dos últimos blocos
+POST http://localhost:3000/user/blockbyID
+content-type: application/json
+
+{"block_number": 0}
+
+###
+
+// retorna os bloco completo dos últimos blocos
+POST http://localhost:3000/blockpage
+content-type: application/json
+
+{"limit": 10, "offset": 0}
+
+###
+
+// retorna a quantidade de blocos
+GET http://localhost:3000/blockscount
+content-type: application/json
+
+{}
+
+###
+// retorna o bloco completo de um ID específico
+POST http://localhost:3000/user/verifyBlockbyID
+content-type: application/json
+
+{"block_number":31}
+
+###
